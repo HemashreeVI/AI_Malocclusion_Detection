@@ -253,12 +253,12 @@ Clinically, this means interproximal caries detections localize around the crown
 
 ---
 
-## 👥 Authors
+## 👥 Author
 
 | Name | Role |
 |---|---|
 | **V I Hemashree** | AI/ML Development, System Architecture, Explainable AI Integration |
-| **Ponn Oviyaa S** | Co-Author |
+
 
 *School of Computer Science and Engineering, Vellore Institute of Technology, Chennai*
 
