@@ -1,0 +1,36 @@
+# Class merge plan for scripts/prepare_dataset.py
+#
+# Each key is a class in the new dataset; the list holds the original classes
+# merged into it. Original classes not listed anywhere are DROPPED (their boxes
+# are removed from the labels). Target names deliberately reuse existing class
+# names so the app's configuration (dental_ai/config.py) keeps working.
+#
+# Training-set counts are from notebooks/colab_v2_app_and_evaluation.ipynb (cell 6).
+
+classes:
+  Filling:              [Filling]                          # 34,053
+  impacted tooth:       [impacted tooth]                   # 19,573
+  Root Canal Treatment: [Root Canal Treatment, post - core] # 13,100 + 231
+  Crown:                [Crown]                            # 7,649
+  Caries:               [Caries]                           # 7,357
+  Periapical lesion:    [Periapical lesion, Cyst]          # 3,633 + 3   (periapical radiolucency)
+  Missing teeth:        [Missing teeth]                    # 2,363
+  Bone Loss:            [Bone Loss, bone defect]           # 2,151 + 0
+  Retained root:        [Retained root, Root Piece]        # 120 + 1,700 (root remnant)
+  Implant:              [Implant, abutment, gingival former]                          # 1,175 + 23 + 14
+  orthodontic brackets: [orthodontic brackets, wire, metal band, permanent retainer, TAD] # appliances: 94+162+49+8+1
+  Mandibular Canal:     [Mandibular Canal]                 # 420
+  maxillary sinus:      [maxillary sinus]                  # 318
+  Primary teeth:        [Primary teeth]                    # 154
+
+# Dropped — too few examples to learn from:
+#   Malaligned (7), Supra Eruption (39), attrition (21), Fracture teeth (10),
+#   Root resorption (3), Permanent Teeth (10), plating (8)
+# To detect malocclusion-related classes, collect at least a few hundred
+# labelled examples of each (ideally with clinical confirmation) and add them back.
+
+oversample:
+  # Images containing a class with fewer than `min_instances` training boxes
+  # are repeated up to `max_repeat` times in the training list.
+  min_instances: 1000
+  max_repeat: 4
