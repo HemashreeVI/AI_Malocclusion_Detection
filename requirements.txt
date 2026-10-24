@@ -1,0 +1,13 @@
+# Tested with the versions in comments (Python 3.13, CPU).
+ultralytics>=8.3,<9        # 8.4.185
+torch>=2.1                 # 2.14.1
+gradio>=6,<7               # 6.30.0
+fpdf2>=2.7.6               # 2.8.9
+opencv-python-headless>=4.8  # 5.0.0
+numpy>=1.24                # 2.5.3
+pillow>=10.1               # 12.3.0
+pyyaml>=6                  # 6.0.3
+matplotlib>=3.7            # 3.11.2 (also provides the DejaVu font for PDFs)
+gdown>=5                   # 6.4.2  (model download from Google Drive)
+huggingface_hub>=0.20      # 2.3.0  (optional: HF_MODEL_REPO)
+anthropic>=2.3             # 2.3.0  (optional: "Ask about the results" tab)

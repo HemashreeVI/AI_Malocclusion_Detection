@@ -1,0 +1,12 @@
+{
+  "_source": "Training-set label counts from notebooks/colab_v2_app_and_evaluation.ipynb, cell 6 (9,674 training images). Regenerate with scripts/class_stats.py.",
+  "train_instances": {
+    "Bone Loss": 2151, "Caries": 7357, "Crown": 7649, "Cyst": 3, "Filling": 34053,
+    "Fracture teeth": 10, "Implant": 1175, "Malaligned": 7, "Mandibular Canal": 420,
+    "Missing teeth": 2363, "Periapical lesion": 3633, "Permanent Teeth": 10, "Primary teeth": 154,
+    "Retained root": 120, "Root Canal Treatment": 13100, "Root Piece": 1700, "Root resorption": 3,
+    "Supra Eruption": 39, "TAD": 1, "abutment": 23, "attrition": 21, "bone defect": 0,
+    "gingival former": 14, "impacted tooth": 19573, "maxillary sinus": 318, "metal band": 49,
+    "orthodontic brackets": 94, "permanent retainer": 8, "plating": 8, "post - core": 231, "wire": 162
+  }
+}

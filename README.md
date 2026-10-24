@@ -2,28 +2,25 @@
 
 # 🦷 AI Dental X-Ray Analyzer
 
-### Explainable AI-Powered Panoramic Dental Radiograph Analysis
+### Explainable detection of findings in panoramic dental radiographs
 
-*Automated multi-condition detection, GradCAM interpretability, FDI charting, PDF reporting & treatment cost estimation — powered by YOLOv9*
+*YOLOv9 detection · per-finding HiResCAM explanations · FDI tooth chart · PDF report · indicative costs*
 
-[![Python](https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.1-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![YOLOv9](https://img.shields.io/badge/YOLOv9-Ultralytics-00FFFF?style=for-the-badge)](https://github.com/ultralytics)
-[![Gradio](https://img.shields.io/badge/Gradio-4.x-FF7C00?style=for-the-badge&logo=gradio&logoColor=white)](https://gradio.app/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](#-license)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![YOLOv9](https://img.shields.io/badge/YOLOv9c-Ultralytics-00FFFF?style=for-the-badge)](https://github.com/ultralytics/ultralytics)
+[![Gradio](https://img.shields.io/badge/Gradio-6.x-FF7C00?style=for-the-badge&logo=gradio&logoColor=white)](https://gradio.app/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-[![Accuracy](https://img.shields.io/badge/Accuracy-97.3%25-brightgreen?style=flat-square)]()
-[![mAP@50](https://img.shields.io/badge/mAP%4050-97.1%25-brightgreen?style=flat-square)]()
-[![Precision](https://img.shields.io/badge/Precision-96.8%25-brightgreen?style=flat-square)]()
-[![Recall](https://img.shields.io/badge/Recall-95.9%25-brightgreen?style=flat-square)]()
-[![Inference](https://img.shields.io/badge/Inference-18.4ms%20%7C%2054%20FPS-blue?style=flat-square)]()
+[![mAP@50](https://img.shields.io/badge/test_mAP%4050-38.7%25-orange?style=flat-square)](#-results)
+[![Status](https://img.shields.io/badge/status-research_prototype-lightgrey?style=flat-square)](#%EF%B8%8F-limitations)
 
-<a href="https://youtu.be/QV3yqZAQpqA">🎥 Watch Demo</a> •
+<a href="https://youtu.be/QV3yqZAQpqA">🎥 Demo</a> •
 <a href="#-features">✨ Features</a> •
-<a href="#-architecture">🏗️ Architecture</a> •
-<a href="#-installation">⚙️ Installation</a> •
 <a href="#-results">📊 Results</a> •
-<a href="#-authors">👥 Authors</a>
+<a href="#%EF%B8%8F-installation">⚙️ Installation</a> •
+<a href="#-training--evaluation">🧪 Training & evaluation</a> •
+<a href="#%EF%B8%8F-limitations">⚠️ Limitations</a>
 
 </div>
 
@@ -31,27 +28,15 @@
 
 ## 📖 Overview
 
-**AI Dental X-Ray Analyzer** is an end-to-end diagnostic pipeline that automatically analyzes **panoramic dental radiographs**, detecting **31 distinct dental conditions** in a single pass — from caries and bone loss to root fractures and impacted teeth.
+**AI Dental X-Ray Analyzer** detects findings in **panoramic radiographs (OPGs)**: caries, periapical lesions,
+bone loss, impacted and missing teeth, existing restorations and anatomy. It then turns them into an
+FDI tooth chart, a structured PDF report and an indicative treatment-cost estimate, in a Gradio app.
 
-Unlike black-box detection systems, this project bakes **explainability** directly into the workflow using **Grad-CAM**, so every AI-generated finding comes with a visual justification clinicians can actually inspect — plus an FDI-compliant tooth chart, a structured diagnostic report, and an automated treatment cost estimate, all delivered through a clean **Gradio** interface.
+Every detection can be explained with a **HiResCAM** heatmap computed from that detection's own class score,
+so a clinician can check *what the model looked at* for each finding.
 
-> ⚠️ **Disclaimer:** This is a research/academic project intended as an *assistive* tool. It is **not** a replacement for professional dental diagnosis.
-
-<div align="center">
-<img src="screenshots/fig3_annotated_gradcam.jpg" alt="Annotated X-ray with Grad-CAM heatmap" width="850">
-</div>
-
----
-
-## 🎥 Demo
-
-<div align="center">
-
-[![Watch the demo](https://img.shields.io/badge/▶️_Watch_Full_Demo-on_YouTube-red?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/QV3yqZAQpqA)
-
-*Click above to see the full walkthrough — upload, detection, Grad-CAM heatmaps, and PDF report generation in action.*
-
-</div>
+> ⚠️ **Research prototype, not a medical device.** Test-set mAP@50 is 38.7%. Findings, tooth numbers and costs
+> must be confirmed by a licensed dentist.
 
 ---
 
@@ -59,197 +44,204 @@ Unlike black-box detection systems, this project bakes **explainability** direct
 
 | | |
 |---|---|
-| 🎯 **Multi-Condition Detection** | Detects **31 dental pathology classes** simultaneously in a single panoramic X-ray |
-| 🔍 **Explainable AI (Grad-CAM)** | Per-class saliency heatmaps show *exactly* where the model is looking |
-| 🦷 **FDI Tooth Charting** | Auto-maps detected conditions onto a standard FDI-compliant tooth chart |
-| 📄 **Automated PDF Reports** | One-click structured diagnostic report with severity-gated findings |
-| 💰 **Treatment Cost Estimator** | Rule-based cost breakdown for each detected condition |
-| 🖥️ **Gradio Web Interface** | Clean, accessible UI — no technical expertise required to use it |
-| ⚡ **Real-Time Inference** | ~18.4 ms/image (≈54 FPS) on an RTX 3080 |
-
----
-
-## 🏗️ Architecture
-
-The system is built as a modular processing pipeline:
-
-```
-┌─────────────────┐    ┌──────────────────┐    ┌───────────────────┐
-│  Image Ingestion │───▶│  Preprocessing    │───▶│  YOLOv9 Backbone   │
-│   (Gradio UI)     │    │ Resize · Normalize│    │  Feature Extraction│
-│                    │    │      CLAHE        │    │                    │
-└─────────────────┘    └──────────────────┘    └─────────┬──────────┘
-                                                            │
-                     ┌──────────────────────────────────────┘
-                     ▼
-        ┌─────────────────────────┐        ┌──────────────────────┐
-        │ Multi-class Detection    │───────▶│   Grad-CAM (XAI)      │
-        │ + Bounding Box Regression│        │  Saliency Heatmaps    │
-        └────────────┬─────────────┘        └───────────┬──────────┘
-                       │                                   │
-                       ▼                                   ▼
-        ┌─────────────────────────────────────────────────────────┐
-        │      Structured Report · FDI Chart · Cost Estimation      │
-        └─────────────────────────────────────────────────────────┘
-```
-
-| Module | Input | Output | Tech Stack |
-|---|---|---|---|
-| Preprocessing | Raw panoramic X-ray | Normalized 640×640 tensor | OpenCV, NumPy |
-| YOLOv9 Inference | 640×640 tensor | Bounding boxes + class scores | PyTorch, Ultralytics |
-| Postprocessing | Raw detections | Filtered & annotated results | Python, OpenCV |
-| Grad-CAM (XAI) | Feature maps + gradients | Saliency heatmaps | PyTorch Hooks |
-| Report Engine | Detection results | Diagnostic report + FDI chart | Python, Gradio |
-| Cost Estimator | Detected conditions | Treatment cost breakdown | Python rule engine |
-
-### Why YOLOv9?
-
-YOLOv9 introduces **Programmable Gradient Information (PGI)** and **GELAN** (Generalized Efficient Layer Aggregation Networks), which solve the information-bottleneck problem in deep backbones — critical for detecting small, overlapping pathologies like root fractures in high-resolution radiographs.
+| 🎯 **Detection** | YOLOv9c trained on 31 classes. Each finding has a *severity* (clinical) and a *confidence* (model), reported separately |
+| ✅ **Reliability gating** | Classes the model can't detect reliably are marked *unvalidated*, drawn greyed out, and kept out of the risk score, costs and recommendations |
+| 🔍 **Per-finding explanations** | HiResCAM (a Grad-CAM variant) for any single detection or the top 8, with a class-agnostic EigenCAM fallback |
+| 🦷 **FDI tooth chart** | Panoramic orientation (patient's right on the viewer's left) with the worst finding per tooth. Optionally uses a tooth-numbering detector |
+| 📄 **PDF report** | Unicode text (₹, names with accents), page numbers on every page, tables, chart and heatmap |
+| 💰 **Indicative costs** | Per affected tooth, validated findings only (India, 2024 ranges) |
+| 🤖 **Ask about the results** | Optional plain-language Q&A via Claude. Only de-identified findings are sent |
 
 ---
 
 ## 📊 Results
 
-### Overall Performance (31 classes, held-out test set)
+Held-out **test split: 1,380 images**. Training set: 9,674 images. Model: YOLOv9c (25.3 M parameters).
 
-| Metric | Score |
+| Metric | Value |
 |---|---|
-| Accuracy | **97.3%** |
-| Precision | **96.8%** |
-| Recall | **95.9%** |
-| F1-Score | **96.3%** |
-| mAP@50 | **97.1%** |
-| Inference Time | **18.4 ms** (~54 FPS on RTX 3080) |
+| mAP@50 | **38.7%** |
+| mAP@50-95 | 25.1% |
+| Mean precision | 40.3% |
+| Mean recall | 37.5% |
 
-### Comparison Against Baselines
+These come from `notebooks/colab_v2_app_and_evaluation.ipynb` (`model.val(split='test', conf=0.25)`).
+Two caveats about that run:
 
-| Method | Accuracy | Precision | Recall | mAP@50 | Inference |
-|---|---|---|---|---|---|
-| Manual Diagnosis (Dentists) | 78–85% | 76.0% | 72.5% | N/A | Minutes |
-| HOG + SVM | 71.2% | 68.4% | 65.7% | 62.3% | ~340 ms |
-| ResNet-50 + Sliding Window | 83.6% | 81.9% | 80.3% | 82.1% | ~210 ms |
-| YOLOv5 (Baseline) | 91.4% | 90.2% | 89.1% | 91.8% | ~28 ms |
-| YOLOv8 (Prior Work) | 94.7% | 93.8% | 92.6% | 94.5% | ~22 ms |
-| **YOLOv9 (Ours)** | **97.3%** | **96.8%** | **95.9%** | **97.1%** | **~18 ms** |
+- **`conf=0.25` under-reports mAP.** ultralytics uses `conf=0.001` for mAP. Re-run `scripts/evaluate.py` for
+  the definitive number.
+- **The per-class chart from that notebook has the wrong labels** (see [notebooks/README.md](notebooks/README.md)),
+  so no per-class table is published here yet. `scripts/evaluate.py` produces a correct one.
 
-### Top-Performing Classes
+> Earlier versions of this README reported "97.3% accuracy". That number came from the confusion matrix with
+> the background row and column removed, which ignores every missed and every false detection. It is not a
+> detection metric and has been withdrawn, along with a baseline-comparison table that had no supporting code.
 
-| Condition | Precision | Recall | F1-Score | AP@50 |
-|---|---|---|---|---|
-| Missing Tooth | 98.2% | 97.6% | 97.9% | 98.5% |
-| Crown/Restoration | 98.1% | 97.3% | 97.7% | 98.2% |
-| Dental Caries | 97.4% | 96.8% | 97.1% | 97.9% |
-| Impacted Tooth | 97.7% | 96.5% | 97.1% | 97.8% |
+### Class balance (training set)
+
+The data is extremely imbalanced. Several classes, including **Malaligned (7 boxes)**, are too rare to learn.
+
+| Boxes | Classes |
+|---|---|
+| > 10,000 | Filling (34,053), impacted tooth (19,573), Root Canal Treatment (13,100) |
+| 1,000 – 10,000 | Crown (7,649), Caries (7,357), Periapical lesion (3,633), Missing teeth (2,363), Bone Loss (2,151), Root Piece (1,700), Implant (1,175) |
+| 100 – 1,000 | Mandibular Canal (420), maxillary sinus (318), post - core (231), wire (162), Primary teeth (154), Retained root (120) |
+| < 100 | orthodontic brackets (94), metal band (49), Supra Eruption (39), abutment (23), attrition (21), gingival former (14), Fracture teeth (10), Permanent Teeth (10), permanent retainer (8), plating (8), **Malaligned (7)**, Cyst (3), Root resorption (3), TAD (1), bone defect (0) |
+
+Until a per-class evaluation exists, the app treats classes with fewer than 100 training boxes as *unvalidated*.
+After `scripts/evaluate.py --update-gating`, it uses per-class AP@50 instead (≥ 30% on ≥ 10 test boxes).
+
+---
+
+## 🏗️ Architecture
+
+```
+Panoramic X-ray ──▶ YOLOv9c ──▶ findings ──┬──▶ reliability gating ──▶ risk score · costs · ortho notes
+                       │                    ├──▶ FDI numbering (tooth detector, or position estimate) ──▶ chart
+                       │                    └──▶ annotated image
+                       └── P3/P4/P5 features + ∂score/∂features ──▶ HiResCAM per detection
+                                                            all of the above ──▶ text report · PDF
+```
+
+| Module | Responsibility |
+|---|---|
+| `dental_ai/config.py` | Class categories, severities, risk weights, costs, reliability gating |
+| `dental_ai/inference.py` | Model loading (local / Hugging Face Hub / Google Drive), detection, annotation |
+| `dental_ai/findings.py` | Severity, confidence bands, risk score, per-tooth costs, orthodontic discussion points |
+| `dental_ai/fdi.py` | FDI numbering (tooth detector or anatomical estimate) and the chart |
+| `dental_ai/cam.py` | Letterboxing, per-detection HiResCAM, EigenCAM fallback, overlays |
+| `dental_ai/report.py` | Analysis summary, text report, PDF |
+| `dental_ai/chatbot.py` | Optional Q&A with Claude on de-identified findings |
+| `app.py` | Gradio UI |
+| `scripts/` | Dataset statistics, leakage check, class merging, training, evaluation |
+
+### Explanations
+
+For each detection, `DetectionCAM` letterboxes the image like ultralytics does and runs the network with hooks
+on the three feature maps that feed the Detect head. It then finds the anchor that produced the detection
+(best IoU × class score) and back-propagates **that anchor's class score**. The map is
+`ReLU(Σ ∂score/∂A ⊙ A)` on the anchor's feature level, mapped back to the original image.
+
+HiResCAM was chosen over plain Grad-CAM after measuring both on 8 detections from a COCO-pretrained YOLOv9t:
+
+| Method | Peak inside the detected box | Heat in box vs. its area share |
+|---|---|---|
+| Grad-CAM | 3 / 8 | 2.5× |
+| **HiResCAM** | **8 / 8** | **14.0×** |
+
+![HiResCAM sanity check](docs/hirescam_validation.jpg)
+*Each panel explains one detection (bus, then two different people). The heat lands on the object being
+explained. This check runs in the test suite (`tests/test_cam.py::test_localises_pretrained`).*
+
+### FDI tooth numbering
+
+![FDI chart](docs/fdi_chart_example.png)
+
+With a tooth-numbering detector (`TOOTH_MODEL_PATH`, a YOLO model whose class names are FDI numbers), each
+finding gets the tooth it overlaps most. Without one, the number is **estimated** from position and marked
+with `~`. The estimate accounts for unequal tooth widths and the curved occlusal plane, but it is still
+approximate.
 
 ---
 
 ## ⚙️ Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/<your-username>/ai-dental-xray-analyzer.git
-cd ai-dental-xray-analyzer
-
-# Create a virtual environment
-python -m venv venv
-source venv/bin/activate      # Windows: venv\Scripts\activate
-
-# Install dependencies
+git clone https://github.com/HemashreeVI/AI_Malocclusion_Detection.git
+cd AI_Malocclusion_Detection
+python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
-
-### Requirements
-- Python 3.10+
-- PyTorch 2.1
-- Ultralytics (YOLOv9)
-- OpenCV 4.8
-- Gradio 4.x
-- NumPy, PyYAML, Matplotlib
-
----
 
 ## 🚀 Usage
 
 ```bash
-python app.py
+python app.py              # http://localhost:7860
+SHARE=1 python app.py      # public gradio.live link — see the privacy note below
 ```
 
-Then open the local Gradio URL in your browser:
+The weights are found in this order:
+1. `MODEL_PATH` (default `weights/best.pt`)
+2. Hugging Face Hub: `HF_MODEL_REPO` (+ `HF_MODEL_FILE`)
+3. The published Google Drive checkpoint (`MODEL_GDRIVE_ID`)
 
-1. **Upload** a panoramic dental X-ray image
-2. Adjust the **detection confidence threshold** if needed
-3. Click **Analyze X-ray**
-4. View the annotated radiograph, Grad-CAM heatmaps, FDI tooth chart, and diagnostic report
-5. **Export/Download** the auto-generated PDF report
-
----
-
-## 🧠 Explainability (Grad-CAM)
-
-Every detection is paired with a **Gradient-weighted Class Activation Map** that highlights the exact regions influencing the model's decision:
-
-- 🔴 **Warm colors (red/yellow)** → high-relevance regions
-- 🔵 **Cool colors (blue)** → low-relevance regions
-
-Clinically, this means interproximal caries detections localize around the crown/enamel-dentin junction, while periapical pathology detections localize around the root apex — validating that the model has learned clinically meaningful patterns rather than spurious correlations.
-
----
-
-## 🖼️ Screenshots
-
-<details open>
-<summary><b>Web Interface</b></summary>
-<br>
-
-| Upload Panel | Analysis Controls |
+| Variable | Purpose |
 |---|---|
-| ![UI Upload](screenshots/fig1a_ui_upload.jpg) | ![UI Controls](screenshots/fig1b_ui_controls.png) |
+| `TOOTH_MODEL_PATH` | Optional tooth-numbering YOLO model, for real FDI numbers |
+| `MIN_RELIABLE_AP50`, `MIN_TEST_INSTANCES`, `MIN_TRAIN_INSTANCES` | Gating thresholds (defaults 0.30 / 10 / 100) |
+| `ANTHROPIC_API_KEY` | Enables the *Ask about the results* tab |
 
-</details>
+**Colab:** open [`notebooks/colab_quickstart.ipynb`](notebooks/colab_quickstart.ipynb).
+**Permanent hosting:** see [docs/DEPLOY.md](docs/DEPLOY.md) (Hugging Face Spaces).
 
-<details open>
-<summary><b>Detection & Explainability</b></summary>
-<br>
-
-**Annotated X-ray + Grad-CAM Heatmap**
-![Annotated X-ray and GradCAM](screenshots/fig3_annotated_gradcam.jpg)
-
-**FDI Tooth Chart**
-![FDI Tooth Chart](screenshots/fig2_fdi_chart.jpg)
-
-</details>
-
-<details open>
-<summary><b>Diagnostic Report & Export</b></summary>
-<br>
-
-| Diagnostic Report | PDF Export |
-|---|---|
-| ![Diagnostic Report](screenshots/fig4a_diagnostic_report.jpg) | ![Report Export](screenshots/fig4b_report_export.png) |
-
-</details>
-
-<details>
-<summary><b>Evaluation Dashboards & Charts</b> (click to expand)</summary>
-<br>
-
-![Evaluation Dashboard](screenshots/fig5_evaluation_dashboard.jpg)
-![Confusion Matrix](screenshots/fig6_confusion_matrix.png)
-![AP@50 per Class](screenshots/fig7_ap50_per_class.png)
-![Precision vs Recall](screenshots/fig8_precision_recall.jpg)
-![Accuracy by Category](screenshots/fig9_accuracy_by_category.png)
-
-</details>
+> 🔒 **Privacy.** Patient details are only used in the PDF and are never sent to the chatbot. Don't upload
+> identifiable radiographs to a public share link or Space without consent.
 
 ---
+
+## 🧪 Training & evaluation
+
+```bash
+# 1. Inspect the data
+python scripts/class_stats.py   --data dental.yaml
+python scripts/check_leakage.py --data dental.yaml --resplit splits/      # same radiograph in two splits?
+
+# 2. Merge/drop rare classes and oversample the rest (plan in configs/class_merge.yaml)
+python scripts/prepare_dataset.py --data dental.yaml --splits splits/ --out data/merged
+
+# 3. Train (imgsz 1024, grayscale-appropriate augmentation), then evaluate on test
+python scripts/train.py --data data/merged/data.yaml
+
+# Or evaluate an existing model; --update-gating makes the app use the per-class results
+python scripts/evaluate.py --data dental.yaml --split test --update-gating
+```
+
+`evaluate.py` writes `results/metrics.json`, `results/per_class.md` and `results/ap50_per_class.png`. It uses
+`conf=0.001` and maps per-class results through `ap_class_index`, and it never reports confusion-matrix
+"accuracy".
+
+`check_leakage.py` groups Roboflow-style augmented copies (`name_jpg.rf.<hash>.jpg`) and near-duplicate images
+(perceptual hash), then re-splits so each source radiograph is in exactly one split.
+
+### Tests
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
+
+---
+
+## ⚠️ Limitations
+
+- **Overall accuracy is modest** (mAP@50 38.7%), and many classes have too little data to be usable.
+- **This is not a malocclusion classifier.** A panoramic X-ray alone cannot establish malocclusion type or
+  severity; that needs a clinical exam, cephalometrics or study models. The app lists *discussion points* for
+  a clinician, never a treatment choice. With 7 training examples, *Malaligned* is currently unvalidated.
+- **Tooth numbers are estimates** unless a tooth-numbering model is configured.
+- **Costs are indicative** ranges for India (2024).
+- **No patient-level split is guaranteed.** The leakage check finds duplicate images, not different
+  radiographs of the same patient.
 
 ## 🗺️ Roadmap
 
-- [ ] Expand dataset diversity for better generalization
-- [ ] Real-time and mobile-based analysis support
-- [ ] Integration with hospital management systems
-- [ ] Semi-supervised pretraining on unlabeled radiograph collections
-- [ ] Structured prediction heads with anatomical priors
+- [ ] Re-run `scripts/evaluate.py` on the test split and publish the per-class table
+- [ ] Re-split without leakage, merge rare classes and retrain at 1024 px
+- [ ] Add a tooth-numbering model (e.g. trained on a public FDI-annotated OPG dataset)
+- [ ] Malocclusion-specific data (cephalograms / intraoral photos) for actual malocclusion classification
+- [ ] Reader study: model + dentist vs dentist alone
+
+---
+
+## 🖼️ Screenshots (v2 UI)
+
+| Upload panel | Analysis controls |
+|---|---|
+| ![UI Upload](screenshots/fig1a_ui_upload.jpg) | ![UI Controls](screenshots/fig1b_ui_controls.png) |
+
+| Diagnostic report | PDF export |
+|---|---|
+| ![Diagnostic Report](screenshots/fig4a_diagnostic_report.jpg) | ![Report Export](screenshots/fig4b_report_export.png) |
 
 ---
 
@@ -257,21 +249,10 @@ Clinically, this means interproximal caries detections localize around the crown
 
 | Name | Role |
 |---|---|
-| **V I Hemashree** | AI/ML Development, System Architecture, Explainable AI Integration |
-
+| **V I Hemashree** | AI/ML development, system architecture, explainable-AI integration |
 
 *School of Computer Science and Engineering, Vellore Institute of Technology, Chennai*
 
----
-
 ## 📄 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-
-**⭐ If you found this project useful, consider giving it a star!**
-
-</div>
+MIT. See [LICENSE](LICENSE).
